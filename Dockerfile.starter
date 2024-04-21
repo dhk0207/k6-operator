@@ -1,5 +1,18 @@
 FROM curlimages/curl:latest
 
+# Install necessary tools for building the k6 extension. You might need git, go, etc.
+# Install Go (example, ensure to check for the latest version and compatibility)
+RUN apk add --no-cache git go
+
+# Set up the environment for Go modules
+ENV GO111MODULE=on
+
+# Install xk6 and the Kafka extension
+RUN go install go.k6.io/xk6/cmd/xk6@latest
+RUN xk6 build --with github.com/mostafa/xk6-kafka@latest
+
 # as defined by distroless for nonroot
 USER 65532:65532
-COPY --from=kvij/scuttle:latest /scuttle /bin/scuttle
+
+# Now, copy the built xk6 binary including the Kafka extension
+COPY --from=builder /go/bin/k6 /usr/bin/k6
