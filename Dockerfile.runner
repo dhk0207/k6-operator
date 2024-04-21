@@ -12,7 +12,7 @@ ENV GO111MODULE=on \
 
 # Install xk6 and build the k6 binary with the Kafka extension
 RUN go install go.k6.io/xk6/cmd/xk6@latest
-RUN xk6 build --with github.com/mostafa/xk6-kafka@latest
+RUN xk6 build --with github.com/mostafa/xk6-kafka@bb0ceb8
 
 # Final stage: Create the runner image with scuttle and the custom k6 binary
 FROM grafana/k6:latest
